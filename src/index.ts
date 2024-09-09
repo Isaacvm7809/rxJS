@@ -1,50 +1,29 @@
-
-export interface userGitHub {
-    login:               string;
-    id:                  number;
-    node_id:             string;
-    avatar_url:          string;
-    gravatar_id:         string;
-    url:                 string;
-    html_url:            string;
-    followers_url:       string;
-    following_url:       string;
-    gists_url:           string;
-    starred_url:         string;
-    subscriptions_url:   string;
-    organizations_url:   string;
-    repos_url:           string;
-    events_url:          string;
-    received_events_url: string;
-    type:                string;
-    site_admin:          boolean;
-}
+import { catchError, of } from "rxjs";
+import { ajax, AjaxError } from "rxjs/ajax";
 
 
+const url = 'https://httpbin.org/delay/1';
+
+const manejaError = (resp: AjaxError) =>{
+    console.warn('error', resp.message);
+    return of({
+        ok:false,
+        usuarios: []
+    });
+};
 
 
-let users:userGitHub;
-const url= 'https://api.github.com/usersXXXX?per_page=5';
-
-const fetchPromise = fetch(url);
-const manejaError =(resp:Response) => {
-    if (!resp.ok) throw new Error(resp.status.toString() + ' ' + resp.text );
-    return resp;
-}
+const obs$ = ajax.getJSON(url,{
+    'Content-Type': 'application/json',
+    'my-Token'    : 'ABCS1232',
+});
+const obs2$ = ajax(url);
 
 
-fetchPromise
-    .then(manejaError)
-    .then(resp =>   resp.json() )
-    .then( data => { users= data;
-        console.log(users);
-    }   )
-    .catch(err => console.log(err));
-
-
-console.log(users);
-    
-    
-    
-
+obs$.pipe(
+    catchError(manejaError)
+).subscribe(res=> console.log('data', res));
+obs2$.pipe(
+    catchError(manejaError)
+).subscribe(res=> console.log('data2', res));
 
