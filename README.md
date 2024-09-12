@@ -1,5 +1,7 @@
 # Proyecto inicial - Curso de RXJS
 
+* Prácticas del Curso de DevTalles de Fernando Herrera, son todas las prácticas del curso de RxJS
+  
 * Lo primero que debemos de hacer después de descargar el código es ejecutar el comando:
 
 ```
